@@ -27,14 +27,46 @@ import javax.swing.JTextField;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  *
  * @author vunguyen
  */
 public class Main  implements Runnable {
     private int numberThread = 1;
+    public static String urlApi = "";
     public static List<Main> arrWoker  =   Collections.synchronizedList(new ArrayList<Main>());//new ArrayList<Main>();
     public static void main(String[] args){
+        
+        Properties prop = new Properties();
+	InputStream input = null;
+
+	try {
+
+		input = new FileInputStream("config.properties");
+
+		// load a properties file
+		prop.load(input);
+
+		// get the property value and print it out
+		System.out.println(prop.getProperty("urlApi"));
+                urlApi = prop.getProperty("urlApi");
+	} catch (IOException ex) {
+		ex.printStackTrace();
+	} finally {
+		if (input != null) {
+			try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+        
         System.setProperty("webdriver.chrome.driver", "C:\\webdriver\\chromedriver.exe");
        // WebDriver driver = new ChromeDriver();
         
@@ -135,6 +167,7 @@ public class Main  implements Runnable {
     public WebDriver driver;
     public AuthFB authFB;
     public boolean done = false;
+    
     @Override
     public void run() {
         try {
